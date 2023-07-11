@@ -1,10 +1,10 @@
 import Joi from 'joi';
 
-import { InsightsOptions } from './facebook.repository';
+import { InsightsConfig } from './insights.service';
 
 export type Pipeline = {
     name: string;
-    insightsOptions: InsightsOptions;
+    insightsConfig: InsightsConfig;
     validationSchema: Joi.Schema;
     schema: Record<string, any>[];
 };
@@ -15,7 +15,7 @@ const actionBreakdownSchema = Joi.array()
 
 export const ADS_INSIGHTS: Pipeline = {
     name: 'AdsInsights',
-    insightsOptions: {
+    insightsConfig: {
         level: 'ad',
         fields: [
             'date_start',
@@ -95,6 +95,119 @@ export const ADS_INSIGHTS: Pipeline = {
         },
         {
             name: 'action_values',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+    ],
+};
+
+export const ACCOUNT_INSIGHTS: Pipeline = {
+    name: 'AccountInsights',
+    insightsConfig: {
+        level: 'account',
+        fields: [
+            'date_start',
+            'date_stop',
+            'account_id',
+            'spend',
+            'video_30_sec_watched_actions',
+            'video_avg_time_watched_actions',
+            'video_p100_watched_actions',
+            'video_p25_watched_actions',
+            'video_p50_watched_actions',
+            'video_p75_watched_actions',
+            'video_p95_watched_actions',
+            'video_play_actions',
+        ],
+    },
+    validationSchema: Joi.object({
+        date_start: Joi.string(),
+        date_stop: Joi.string(),
+        account_id: Joi.number().unsafe(),
+        spend: Joi.number().optional(),
+        video_30_sec_watched_actions: actionBreakdownSchema,
+        video_avg_time_watched_actions: actionBreakdownSchema,
+        video_p100_watched_actions: actionBreakdownSchema,
+        video_p25_watched_actions: actionBreakdownSchema,
+        video_p50_watched_actions: actionBreakdownSchema,
+        video_p75_watched_actions: actionBreakdownSchema,
+        video_p95_watched_actions: actionBreakdownSchema,
+        video_play_actions: actionBreakdownSchema,
+    }),
+    schema: [
+        { name: 'date_start', type: 'DATE' },
+        { name: 'date_stop', type: 'DATE' },
+        { name: 'account_id', type: 'NUMERIC' },
+        { name: 'spend', type: 'NUMERIC' },
+        {
+            name: 'video_30_sec_watched_actions',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+        {
+            name: 'video_avg_time_watched_actions',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+        {
+            name: 'video_p100_watched_actions',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+        {
+            name: 'video_p25_watched_actions',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+        {
+            name: 'video_p50_watched_actions',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+        {
+            name: 'video_p75_watched_actions',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+        {
+            name: 'video_p95_watched_actions',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+        {
+            name: 'video_play_actions',
             type: 'RECORD',
             mode: 'REPEATED',
             fields: [
