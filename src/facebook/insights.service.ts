@@ -71,7 +71,7 @@ export const get = async (options: ReportOptions, config: InsightsConfig): Promi
     };
 
     const getInsights = (reportId: string): Readable => {
-        const stream = new Readable({ objectMode: true, read: () => { } });
+        const stream = new Readable({ objectMode: true, read: () => {} });
 
         const _getInsights = (after?: string) => {
             client
@@ -82,13 +82,14 @@ export const get = async (options: ReportOptions, config: InsightsConfig): Promi
                 })
                 .then(({ data: { data, paging } }) => {
                     data.forEach((row) => stream.push(row));
-                    paging.next ? _getInsights(paging.cursors.after) : stream.push(null)
-                }).catch((error) => {
+                    paging.next ? _getInsights(paging.cursors.after) : stream.push(null);
+                })
+                .catch((error) => {
                     if (axios.isAxiosError(error)) {
                         console.log(JSON.stringify(error.response?.data));
                     }
                     stream.emit('error', error);
-                })
+                });
         };
 
         _getInsights();

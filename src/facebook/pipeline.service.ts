@@ -15,7 +15,7 @@ dayjs.extend(utc);
 export const runPipeline = async (reportOptions: ReportOptions, pipeline_: pipelines.Pipeline) => {
     const stream = await get(reportOptions, pipeline_.insightsConfig);
 
-    await pipeline(
+    return pipeline(
         stream,
         new Transform({
             objectMode: true,
@@ -31,9 +31,7 @@ export const runPipeline = async (reportOptions: ReportOptions, pipeline_: pipel
             table: `p_${pipeline_.name}__${reportOptions.accountId}`,
             schema: [...pipeline_.schema, { name: '_batched_at', type: 'TIMESTAMP' }],
         }),
-    );
-
-    return true;
+    ).then(() => true);
 };
 
 export type CreatePipelineTasksOptions = {
@@ -42,12 +40,12 @@ export type CreatePipelineTasksOptions = {
 };
 
 export const createPipelineTasks = async ({ start, end }: CreatePipelineTasksOptions) => {
-
     const accounts = ['2126087831112839'];
 
     return createTasks(
         accounts.flatMap((accountId) => {
-            return Object.keys(pipelines).map((pipeline) => ({ accountId, start, end, pipeline }))
+            return Object.keys(pipelines).map((pipeline) => ({ accountId, start, end, pipeline }));
         }),
-        (task) => [task.pipeline, task.accountId].join(''))
+        (task) => [task.pipeline, task.accountId].join(''),
+    );
 };

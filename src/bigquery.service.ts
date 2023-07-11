@@ -1,4 +1,4 @@
-import { BigQuery } from '@google-cloud/bigquery';
+import { BigQuery, TableSchema } from '@google-cloud/bigquery';
 
 const client = new BigQuery();
 
@@ -14,7 +14,7 @@ export const createLoadStream = (options: CreateLoadStreamOptions) => {
         .dataset(DATASET)
         .table(options.table)
         .createWriteStream({
-            schema: { fields: options.schema },
+            schema: { fields: options.schema } as TableSchema,
             sourceFormat: 'NEWLINE_DELIMITED_JSON',
             createDisposition: 'CREATE_IF_NEEDED',
             writeDisposition: 'WRITE_APPEND',
