@@ -6,9 +6,9 @@ it('pipeline', async () => {
         {
             accountId: '2126087831112839',
             start: '2023-01-01',
-            end: '2023-08-01',
+            end: '2023-03-01',
         },
-        pipelines.ACCOUNT_INSIGHTS,
+        pipelines.ADS_INSIGHTS,
     )
         .then((results) => expect(results).toBeDefined())
         .catch((error) => {
