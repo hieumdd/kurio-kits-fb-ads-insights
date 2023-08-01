@@ -40,7 +40,7 @@ export type CreatePipelineTasksOptions = {
 };
 
 export const createPipelineTasks = async ({ start, end }: CreatePipelineTasksOptions) => {
-    const accounts = ['2126087831112839'];
+    const accounts = ['2126087831112839', '1025617681713252'];
 
     return createTasks(
         accounts.flatMap((accountId) => {
